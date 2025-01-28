@@ -41,12 +41,10 @@ def reader_client(reader):
     return client
 
 
-
-
 @pytest.fixture
 def new():
     """Создание новости"""
-    news = News.objects.create( 
+    news = News.objects.create(
         title='Заголовок',
         text='Текст заметки',
     )
@@ -87,6 +85,7 @@ def ten_news():
     ]
     news = News.objects.bulk_create(all_news)
     return news
+
 
 @pytest.fixture
 def many_comments(new, author):
