@@ -100,6 +100,7 @@ def test_user_cant_edit_comment_of_another_user(
     form_data: dict,
     comment,
 ) -> None:
+    """Тест на изменения чужих комментариев"""
     url_edit: str = reverse('news:edit', args=(comment.pk, ))
     response = reader_client.post(url_edit, data=form_data)
     assert response.status_code == HTTPStatus.NOT_FOUND
