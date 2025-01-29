@@ -1,13 +1,11 @@
 import pytest
-
 from django.test.client import Client
 from django.conf import settings
+from django.urls import reverse
 from django.utils import timezone
-
 from datetime import datetime, timedelta
 
 from news.models import News, Comment
-from news.forms import BAD_WORDS
 
 
 @pytest.fixture
@@ -17,8 +15,8 @@ def author(django_user_model):
 
 
 @pytest.fixture
-def get_author(author):
-    return author
+def url_reverse_home() -> str:
+    return reverse('news:home')
 
 
 @pytest.fixture
@@ -52,6 +50,11 @@ def new():
 
 
 @pytest.fixture
+def url_reverse_detail(new) -> str:
+    return reverse('news:detail', args=(new.pk, ))
+
+
+@pytest.fixture
 def comment(new, author):
     """Создание комментария"""
     comment = Comment.objects.create(
@@ -63,13 +66,13 @@ def comment(new, author):
 
 
 @pytest.fixture
-def pk_comment_for_args(comment) -> tuple:
-    return (comment.pk,)
+def url_reverse_edit(comment) -> str:
+    return reverse('news:edit', args=(comment.pk, ))
 
 
 @pytest.fixture
-def pk_new_for_args(new) -> tuple:
-    return (new.pk,)
+def url_reverse_delete(comment) -> str:
+    return reverse('news:delete', args=(comment.pk, ))
 
 
 @pytest.fixture
@@ -83,8 +86,7 @@ def ten_news():
         )
         for index in range(settings.NEWS_COUNT_ON_HOME_PAGE + 1)
     ]
-    news = News.objects.bulk_create(all_news)
-    return news
+    News.objects.bulk_create(all_news)
 
 
 @pytest.fixture
@@ -96,17 +98,3 @@ def many_comments(new, author):
         )
         comment.created = now + timedelta(days=index)
         comment.save()
-    return new
-
-
-@pytest.fixture
-def form_data() -> dict:
-    """Данные для комментария"""
-    return {
-        'text': 'Новый текст',
-    }
-
-
-@pytest.fixture
-def bad_words() -> tuple:
-    return BAD_WORDS
