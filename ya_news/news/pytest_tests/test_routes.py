@@ -2,8 +2,7 @@ from http import HTTPStatus
 
 import pytest
 from pytest_django.asserts import assertRedirects
-
-from django.urls import reverse
+from pytest_lazyfixture import lazy_fixture as lf
 
 
 pytestmark = pytest.mark.django_db
@@ -13,48 +12,48 @@ pytestmark = pytest.mark.django_db
     'reverse_url, parametrized_client, expected_status',
     (
         (
-            pytest.lazy_fixture('url_reverse_edit'),
-            pytest.lazy_fixture('reader_client'),
+            lf('url_reverse_edit'),
+            lf('reader_client'),
             HTTPStatus.NOT_FOUND
         ),
         (
-            pytest.lazy_fixture('url_reverse_delete'),
-            pytest.lazy_fixture('reader_client'),
+            lf('url_reverse_delete'),
+            lf('reader_client'),
             HTTPStatus.NOT_FOUND
         ),
         (
-            pytest.lazy_fixture('url_reverse_edit'),
-            pytest.lazy_fixture('author_client'),
+            lf('url_reverse_edit'),
+            lf('author_client'),
             HTTPStatus.OK
         ),
         (
-            pytest.lazy_fixture('url_reverse_delete'),
-            pytest.lazy_fixture('author_client'),
+            lf('url_reverse_delete'),
+            lf('author_client'),
             HTTPStatus.OK
         ),
         (
-            pytest.lazy_fixture('url_reverse_detail'),
-            pytest.lazy_fixture('client'),
+            lf('url_reverse_detail'),
+            lf('client'),
             HTTPStatus.OK
         ),
         (
-            reverse('news:home'),
-            pytest.lazy_fixture('client'),
+            lf('url_reverse_home'),
+            lf('client'),
             HTTPStatus.OK
         ),
         (
-            reverse('users:login'),
-            pytest.lazy_fixture('client'),
+            lf('url_reverse_login'),
+            lf('client'),
             HTTPStatus.OK
         ),
         (
-            reverse('users:logout'),
-            pytest.lazy_fixture('client'),
+            lf('url_reverse_logout'),
+            lf('client'),
             HTTPStatus.OK
         ),
         (
-            reverse('users:signup'),
-            pytest.lazy_fixture('client'),
+            lf('url_reverse_signup'),
+            lf('client'),
             HTTPStatus.OK
         ),
     ),
@@ -70,18 +69,18 @@ def test_availability(
 
 
 @pytest.mark.parametrize(
-    'reverse_url',
+    'reverse_url, login_ulr',
     (
-        pytest.lazy_fixture('url_reverse_edit'),
-        pytest.lazy_fixture('url_reverse_delete'),
+        (lf('url_reverse_edit'), lf('url_reverse_login')),
+        (lf('url_reverse_delete'), lf('url_reverse_login')),
     ),
 )
 def test_redirect_for_anonymous_client(
     client,
+    login_ulr,
     reverse_url: str,
 ) -> None:
     """Тест на перенаправления на страницу входа."""
-    login_url: str = reverse('users:login')
-    expected_url: str = f'{login_url}?next={reverse_url}'
+    expected_url: str = f'{login_ulr}?next={reverse_url}'
     response = client.get(reverse_url)
     assertRedirects(response, expected_url)
