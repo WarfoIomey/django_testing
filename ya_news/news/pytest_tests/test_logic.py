@@ -2,10 +2,10 @@ from http import HTTPStatus
 
 import pytest
 from django.contrib.auth import get_user
-from pytest_django.asserts import assertRedirects, assertFormError
+from pytest_django.asserts import assertFormError, assertRedirects
 
-from news.models import Comment
 from news.forms import BAD_WORDS, WARNING
+from news.models import Comment
 
 
 FORM_DATA: dict = {
@@ -94,7 +94,8 @@ def test_author_can_edit_comment(
     assertRedirects(response, f'{url_reverse_detail}#comments')
     new_comment = Comment.objects.get(id=comment.id)
     assert new_comment.text == FORM_DATA['text']
-    assert new_comment.author == get_user(author_client)
+    assert new_comment.author == comment.author
+    assert new_comment.news == comment.news
 
 
 def test_user_cant_edit_comment_of_another_user(
@@ -108,4 +109,5 @@ def test_user_cant_edit_comment_of_another_user(
     assert response.status_code == HTTPStatus.NOT_FOUND
     new_comment = Comment.objects.get(id=comment.id)
     assert new_comment.text == comment.text
-    assert new_comment.author == get_user(author_client)
+    assert new_comment.author == comment.author
+    assert new_comment.news == comment.news
