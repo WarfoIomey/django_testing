@@ -2,8 +2,8 @@ from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from notes.models import Note
 from notes.forms import NoteForm
+from notes.models import Note
 
 
 User = get_user_model()
@@ -55,28 +55,3 @@ class FixtureSetUpTestData(TestCase):
     def get_note(self, id_note):
         """Метод получения заметки по id."""
         return Note.objects.get(id=id_note)
-
-# class FixtureSetUpTestData(TestCase):
-
-    # @classmethod
-    # def setUpTestData(cls) -> None:
-        # cls.author = User.objects.create(username='Лев Толстой')
-        # cls.another_author = User.objects.create(username='warfolomey')
-        # cls.author_client = Client()
-        # cls.author_client.force_login(cls.author)
-        # cls.note = Note.objects.create(
-        #     title='Первая заметка',
-        #     text='Первые подробности',
-        #     slug='hello',
-        #     author=cls.author,
-        # )
-        # cls.url_list = 'notes:list'
-        # cls.url_done = 'notes:success'
-        # cls.url_add = 'notes:add'
-        # cls.url_delete = 'notes:delete'
-        # cls.url_detail = 'notes:detail'
-        # cls.url_edit = 'notes:edit'
-        # cls.url_home = 'notes:home'
-        # cls.url_login = 'users:login'
-        # cls.url_logout = 'users:logout'
-        # cls.url_signup = 'users:signup'

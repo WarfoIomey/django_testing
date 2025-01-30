@@ -11,51 +11,15 @@ pytestmark = pytest.mark.django_db
 @pytest.mark.parametrize(
     'reverse_url, parametrized_client, expected_status',
     (
-        (
-            lf('url_reverse_edit'),
-            lf('reader_client'),
-            HTTPStatus.NOT_FOUND
-        ),
-        (
-            lf('url_reverse_delete'),
-            lf('reader_client'),
-            HTTPStatus.NOT_FOUND
-        ),
-        (
-            lf('url_reverse_edit'),
-            lf('author_client'),
-            HTTPStatus.OK
-        ),
-        (
-            lf('url_reverse_delete'),
-            lf('author_client'),
-            HTTPStatus.OK
-        ),
-        (
-            lf('url_reverse_detail'),
-            lf('client'),
-            HTTPStatus.OK
-        ),
-        (
-            lf('url_reverse_home'),
-            lf('client'),
-            HTTPStatus.OK
-        ),
-        (
-            lf('url_reverse_login'),
-            lf('client'),
-            HTTPStatus.OK
-        ),
-        (
-            lf('url_reverse_logout'),
-            lf('client'),
-            HTTPStatus.OK
-        ),
-        (
-            lf('url_reverse_signup'),
-            lf('client'),
-            HTTPStatus.OK
-        ),
+        (lf('url_reverse_edit'), lf('reader_client'), HTTPStatus.NOT_FOUND),
+        (lf('url_reverse_delete'), lf('reader_client'), HTTPStatus.NOT_FOUND),
+        (lf('url_reverse_edit'), lf('author_client'), HTTPStatus.OK),
+        (lf('url_reverse_delete'), lf('author_client'), HTTPStatus.OK),
+        (lf('url_reverse_detail'), lf('client'), HTTPStatus.OK),
+        (lf('url_reverse_home'), lf('client'), HTTPStatus.OK),
+        (lf('url_reverse_login'), lf('client'), HTTPStatus.OK),
+        (lf('url_reverse_logout'), lf('client'), HTTPStatus.OK),
+        (lf('url_reverse_signup'), lf('client'), HTTPStatus.OK),
     ),
 )
 def test_availability(

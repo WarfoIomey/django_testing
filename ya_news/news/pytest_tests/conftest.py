@@ -6,7 +6,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils import timezone
 
-from news.models import News, Comment
+from news.models import Comment, News
 
 
 @pytest.fixture

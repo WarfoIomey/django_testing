@@ -5,7 +5,7 @@ from .fixture import FixtureSetUpTestData
 
 class TestRoutes(FixtureSetUpTestData):
 
-    def test_pages_availability_anonymus(self) -> None:
+    def test_pages_availability(self) -> None:
         """Тесты доступности страниц."""
         urls_clients: tuple = (
             (self.home_url, self.client),
@@ -15,6 +15,9 @@ class TestRoutes(FixtureSetUpTestData):
             (self.list_url, self.client_author),
             (self.done_url, self.client_author),
             (self.add_url, self.client_author),
+            (self.update_url, self.client_author),
+            (self.delete_url, self.client_author),
+            (self.detail_url, self.client_author),
         )
         for url, client in urls_clients:
             with self.subTest(url=url, client=client):
@@ -41,18 +44,22 @@ class TestRoutes(FixtureSetUpTestData):
         """Тест на доступность редактирования и удаления заметки."""
         users_statuses_clients: tuple = (
             (
-                self.author,
-                HTTPStatus.OK,
-                self.client_author
+                self.update_url,
+                HTTPStatus.NOT_FOUND,
+                self.another_author_client
             ),
             (
-                self.another_author,
+                self.delete_url,
+                HTTPStatus.NOT_FOUND,
+                self.another_author_client
+            ),
+            (
+                self.detail_url,
                 HTTPStatus.NOT_FOUND,
                 self.another_author_client
             ),
         )
-        for user, status, client in users_statuses_clients:
-            for url in (self.update_url, self.delete_url, self.detail_url):
-                with self.subTest(user=user, url=url, client=client):
-                    response = client.get(url)
-                    self.assertEqual(response.status_code, status)
+        for url, status, client in users_statuses_clients:
+            with self.subTest(url=url, status=status, client=client):
+                response = client.get(url)
+                self.assertEqual(response.status_code, status)
