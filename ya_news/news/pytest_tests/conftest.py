@@ -81,7 +81,6 @@ def many_comments(new, author):
         comment.save()
 
 
-
 @pytest.fixture
 def url_reverse_home() -> str:
     return reverse('news:home')
